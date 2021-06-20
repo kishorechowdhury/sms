@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_heading }}
+{% endblock title %}
+
+{% block content %}    
+<div class="align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">{{ page_heading }}</h1>
+	<br/>
+	{% for project in projects %}        
+		<a href="{% url 'core:project-detail' project.id %}" class="btn btn-lg btn-{{ btn_choices|random }} mr-4 mb-4">{{ project.name }}</a>
+	{% endfor %}
+	<hr/>
+	<br/>
+	{% if projects %}
+	My Ticket
+	<div class="row">
+		<div class="col-lg-12">
+			<table class="table table-bordered table-striped" id="dashboard2Table" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>Ticket #</th>
+						<th>Project</th>
+						<th>Initialized on</th>
+						<th>Details</th>
+						<th>Current Status</th>
+						<th class="float-right">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if tickets %}
+					{% for ticket in tickets %}
+					<tr>
+						<td>{{ ticket.id }}</td>
+						<td>{{ ticket.project }}</td>
+						<td>{{ ticket.date_i }}</td>
+						<td>{{ ticket.details}}</td>
+						<td align="center">
+							{% if ticket.status == 'i' %}
+							<p class="btn btn-warning btn-custom-i">Initialized</p>
+							{% elif ticket.status == 'w' %}
+							<p class="btn btn-primary btn-custom-w">Working</p>
+							{% elif ticket.status == 'c' %}
+							<p class="btn btn-custom-c">Finished</p>
+							{% endif %}
+						</td>
+						<td>
+							<a href="{% url 'core:project-detail' ticket.project.id %}" class="btn btn-primary btn-custom-v float-right"><i class="fas fa-eye" aria-hidden="true"></i> View</a>
+							{% if ticket.status == 'i' %}
+							<form action="{% url 'core:ticket-update-status' ticket.id %}" method="post">
+								{% csrf_token %}
+								{{ update_form.id.as_hidden }}
+								<input type="hidden" name="id" value="{{ ticket.id }}" />
+								<input type="hidden" name="status" value="w" />
+								<input type="hidden" name="redirect_to" value="{{ request.path }}" />
+								<input type="submit" value="Start" class="btn btn-info btn-input float-right" title="Start working" />
+							</form>
+							{% elif ticket.status == 'w' %}
+							<form action="{% url 'core:ticket-update-status' ticket.id %}" method="post">
+								{% csrf_token %}
+								<input type="hidden" name="id" value="{{ ticket.id }}" />
+								<input type="hidden" name="status" value="c" />
+								<input type="hidden" name="redirect_to" value="{{ request.path }}" />
+								<input type="submit" value="Complete" class="btn btn-info btn-input float-right" title="Mark complete" />
+							</form>
+							{% elif ticket.status == 'c' %}
+							<p class="btn btn-custom-c float-right disabled" title="No action required">Complete</p>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="5" align="center">No data found</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endblock content %}

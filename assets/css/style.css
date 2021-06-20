@@ -1,0 +1,102 @@
+.bg-login-image{
+    background:url(/static/img/logo.jpeg);
+    background-position:center;background-size:cover;
+}
+#accordionSidebar img{
+    background:url(/static/img/logo-small.jpeg);
+    background-position:center;background-size:cover;
+}
+form[name="login"] label{
+    margin-bottom: 4px;
+}
+form[name="login"] input{
+    width: 100%;
+    padding: 4px 6px;
+    border: 1px solid #c7cfde;
+    border-radius: 4px;;
+}
+.errorlist{
+    list-style: none;
+    padding-left: 0;
+    color: #fd2e2e;
+    font-size: 14px;
+}
+.helptext{
+    font-size: 14px;
+}
+.helptext ul{
+    list-style: none;
+    padding-left: 0;
+    
+}
+table input, select{
+    width: 40%;
+}
+table textarea{
+    width: 80%;
+}
+/* input[type="submit"], input[type="reset"], .btn-back{
+    border-radius: 0;
+} */
+.custom-row{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #cdcdcd;
+    margin-right: 0;
+    margin-left: 0px;
+    padding-bottom: 10px;
+}
+a.btn-custom-v{
+    padding: 3px 5px;
+    margin-bottom: 0px;
+    font-size: 13px;
+    margin-left: 4px;
+}
+p.btn-custom-i{
+    padding: 2px 4px;
+    /* background-color: green;
+    color: white;
+    border-color: green; */
+    cursor: default !important;    
+    margin-bottom: 0px;
+    font-size: 13px;
+}
+.btn-custom-w{
+    padding: 2px 4px;
+    /* background-color: green;
+    border-color: green;
+    color: white; */
+    cursor: default !important;
+    margin-bottom: 0px;
+    font-size: 13px;
+}
+p.btn-custom-c{
+    padding: 2px 4px;
+    background-color: #298229;
+    border-color: #298229;
+    color: white;
+    cursor: default !important;
+    margin-bottom: 0px;
+    font-size: 13px;
+}
+p.btn-custom-c:hover{
+    color: white;
+    background-color: green;
+    border-color: green;
+}
+p.btn-custom-c.disabled{
+    cursor: not-allowed !important;
+    padding: 3px 4px;
+    width: 70px;
+    font-size: 13px;
+}
+.btn-input{
+    padding: 4px 4px 3px 4px;
+    width: 70px;
+    font-size: 13px;
+}
+td p{
+    min-width: 70px;
+}
+#dashboard2Table thead tr th:nth-child(1){
+    max-width: 100px !important;
+}

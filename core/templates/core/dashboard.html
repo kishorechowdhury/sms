@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_heading }}
+{% endblock title %}
+
+{% block content %}    
+<div class="align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">{{ page_heading }}</h1>
+	<br/>
+	{% for project in projects %}        
+		<a href="{% url 'core:project-detail' project.id %}" class="btn btn-lg btn-{{ btn_choices|random }} mr-4 mb-4">{{ project.name }}</a>		
+	{% endfor %}
+	<hr/>
+	<br/>
+	<a class="btn" href="{% url 'core:ticket-create' %}" style="border: 1px solid #cfcfcf; margin-right: 5px;">
+		<i class="fas fa-ticket-alt"></i>
+		<span>+ Add Ticket</span>
+	</a>
+	<a class="btn" href="{% url 'core:user-create' %}" style="border: 1px solid #cfcfcf; margin-right: 5px;">
+		<i class="fas fa-user"></i>
+		<span>+ Add User</span>
+	</a>
+	<a class="btn" href="{% url 'core:project-create' %}" style="border: 1px solid #cfcfcf; margin-right: 5px;">
+		<i class="fas fa-project-diagram"></i>
+        <span>+ Add Project</span>
+	</a>
+	<a class="btn" href="{% url 'core:projectmember-create' %}" style="border: 1px solid #cfcfcf; margin-right: 5px;">
+		<i class="fas fa-users"></i>
+		<span>+ Add Project Member</span>
+	</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Delete Ticket
+{% endblock title %}
+
+{% block content %}
+<h1>Delete Ticket</h1>
+<p>Are you sure you want to delete the ticket: {{ ticket }}?</p>
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Yes, delete." class="btn btn-primary" />
+    <input type="hidden" name="redirect_to" value="{{ redirect_url }}" />
+    <a href="{{ redirect_url }}" class="btn btn-secondary btn-back">Back</a>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+    jQuery(function($){
+        console.log('hello world');
+    })
+</script>
+{% endblock script %}

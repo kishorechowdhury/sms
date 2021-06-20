@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ project }} Project
+{% endblock title %}
+
+{% block content %}
+<div class="align-items-center justify-content-between mb-4">	
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card mb-4 py-3 border-left-info">
+				<div class="card-body">
+					<h1 class="h3 mb-0 text-gray-800">
+						{{ project }}
+						<a href="{% url 'core:dashboard' %}?p=1" class="btn btn-secondary float-right">Back</a>					
+					</h1>
+					<hr/>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							Project:
+						</div>
+						<div class="col-lg-10">
+							<strong>{{ project }}</strong>
+						</div>
+					</div>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							Start Date:
+						</div>
+						<div class="col-lg-10">
+							<strong>{{ project.start_date }}</strong>
+						</div>
+					</div>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							End Date:
+						</div>
+						<div class="col-lg-10">
+							{% if expired %}
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+								<path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+								<path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+							</svg>
+							<small >Date Expired</small>
+							<br/>
+							<strong style="color: #e72424;">{{ project.end_date }}</strong>
+							{% else %}
+							<strong>{{ project.end_date }}</strong>
+							{% endif %}
+						</div>
+					</div>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							Status:
+						</div>
+						<div class="col-lg-10">
+							{% if project.status == 'i' %}
+								<strong>Initialized</strong>
+							{% elif project.status == 'w' %}
+								<strong>Working</strong>
+							{% elif project.status == 'c' %}
+								<strong>Complete</strong>
+							{% endif %}
+						</div>
+					</div>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							Short Description:
+						</div>
+						<div class="col-lg-10">
+							<strong>{{ project.short_desc }}</strong>
+						</div>
+					</div>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							Description:
+						</div>
+						<div class="col-lg-10">
+							<strong>{{ project.description }}</strong>
+						</div>
+					</div>
+
+					<div class="row custom-row">
+						<div class="col-lg-2">
+							Members:
+						</div>
+						<div class="col-lg-10">
+							{% for member in members %}
+							<a href="{{ meber.id }}" style="margin-right: 5px;"><strong>{{ member.first_name }} {{ member.last_name }}({{ member.username }})</strong></a>
+							|
+							{% endfor %}
+						</div>
+					</div>
+					<br/>
+					<h2 class="h4 mb-4 text-gray-800">
+						Ticket
+						{% if 'core.add_ticket' in permissions %}	
+						<a href="{% url 'core:ticket-create' %}?p=1" class="btn btn-info float-right">+ Add Ticket</a>
+						{% endif %}					
+					</h2>
+					<hr/>					
+					<div class="row">
+						<div class="col-lg-12">
+							<table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>Ticket #</th>
+										<th>Member</th>
+										<th>Initialized on</th>
+										<th>Details</th>
+										<th>Status</th>
+										<th class="float-right">Action</th>
+									</tr>
+								</thead>
+								<!-- <tfoot>
+									<tr>
+										<th>Ticket #</th>
+										<th>Member</th>
+										<th>Initialized on</th>
+										<th>Details</th>
+										<th>Status</th>
+										<th>Action</th>
+									</tr>
+								</tfoot> -->
+								<tbody>
+									{% if tickets %}
+									{% for ticket in tickets %}
+									<tr>
+										<td>{{ ticket.id }}</td>
+										<td><a href="" style="margin-right: 5px;"><strong>{{ ticket.user.first_name }} {{ ticket.user.last_name }}({{ ticket.user }})</strong></a></td>
+										<td>{{ ticket.date_i }}</td>
+										<td>{{ ticket.details}}</td>
+										<td>
+											{% if ticket.status == 'i' %}
+												Initialized
+											{% elif ticket.status == 'w' %}
+												Working
+											{% elif ticket.status == 'c' %}
+												Complete
+											{% endif %}
+										</td>
+										{% if 'core.delete_ticket' in permissions %}
+											<td>
+												<a href="/core/ticket/{{ ticket.id }}/delete" class="btn btn-danger float-right" style="padding: 2px 6px;">Delete</a>
+											</td>
+										{% elif 'core.can_mark_working' in permissions %}
+											<td>
+												{% if ticket.status == 'i' %}
+												<form action="{% url 'core:ticket-update-status' ticket.id %}" method="post">
+													{% csrf_token %}
+													<input type="hidden" name="id" value="{{ ticket.id }}" />
+													<input type="hidden" name="status" value="w" />
+													<input type="hidden" name="redirect_to" value="{{ request.path }}" />
+													<input type="submit" value="Start" class="btn btn-info float-right" style="padding: 2px 6px; width: 85px;" title="Start working" />
+												</form>
+												{% elif ticket.status == 'w' %}
+												<form action="{% url 'core:ticket-update-status' ticket.id %}" method="post">
+													{% csrf_token %}
+													<input type="hidden" name="id" value="{{ ticket.id }}" />
+													<input type="hidden" name="status" value="c" />
+													<input type="hidden" name="redirect_to" value="{{ request.path }}" />
+													<input type="submit" value="Complete" class="btn btn-info float-right" style="padding: 2px 6px; width: 85px;" title="Mark complete" />
+												</form>
+												{% elif ticket.status == 'c' %}
+												<p class="btn btn-custom-c float-right disabled" title="No action required">Complete</p>
+												{% endif %}
+											</td>
+										{% endif %}
+									</tr>
+									{% endfor %}
+									{% else %}
+										<tr>
+											<td colspan="5" align="center">No data found</td>
+										</tr>
+									{% endif %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					
+				</div>
+			</div>	
+        
+		</div>
+	</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+Create ProjectMember
+{% endblock title %}
+
+{% block content %}
+    <h1>Create ProjectMember</h1>
+    {% if messages %}        
+    {% for message in messages %}
+    <div class="alert alert-info" role="alert">
+        {{ message }}
+    </div>            
+    {% endfor %}
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <table class="table table-bordered" id="addProjectMemberTable" width="100%" cellspacing="0" border="0">
+        {{ form.as_table }}
+        </table>
+        <br/>
+        <input type="submit" value="Submit" class="btn btn-primary" />
+        <input type="reset" value="Reset" class="btn btn-secondary" />
+        {% comment %}<a href="{% url 'core:dashboard' %}" class="btn btn-secondary">Back</a>{% endcomment %}
+    </form>
+{% endblock %}
+
+{% block script %}
+<script>
+    li = document.getElementsByClassName('errorlist')
+    text = li[0].innerText.split('\n')
+    li[0].innerText = text[1]
+    li[0].style.marginBottom = '0px'    
+</script>
+{% endblock script %}
